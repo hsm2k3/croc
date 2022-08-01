@@ -68,6 +68,7 @@ func Run() (err error) {
 				&cli.BoolFlag{Name: "no-local", Usage: "disable local relay when sending"},
 				&cli.BoolFlag{Name: "no-multi", Usage: "disable multiplexing"},
 				&cli.StringFlag{Name: "ports", Value: "9009,9010,9011,9012,9013", Usage: "ports of the local relay (optional)"},
+				&cli.BoolFlag{Name: "reconnect", Value: true, Usage: "reconnect 5 times once per minute if the connection is broken."},
 			},
 			HelpName: "croc send",
 			Action:   send,
@@ -188,6 +189,7 @@ func send(c *cli.Context) (err error) {
 		HashAlgorithm:  c.String("hash"),
 		ThrottleUpload: c.String("throttleUpload"),
 		ZipFolder:      c.Bool("zip"),
+		Reconnect:      c.Bool("reconnect"),
 	}
 	if crocOptions.RelayAddress != models.DEFAULT_RELAY {
 		crocOptions.RelayAddress6 = ""
@@ -229,6 +231,9 @@ func send(c *cli.Context) (err error) {
 		}
 		if !c.IsSet("local") {
 			crocOptions.OnlyLocal = rememberedOptions.OnlyLocal
+		}
+		if !c.IsSet("reconnect") {
+			crocOptions.Reconnect = rememberedOptions.Reconnect
 		}
 	}
 

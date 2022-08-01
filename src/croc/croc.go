@@ -76,6 +76,7 @@ type Options struct {
 	HashAlgorithm  string
 	ThrottleUpload string
 	ZipFolder      bool
+	Reconnect      bool
 }
 
 // Client holds the state of the croc transfer
